@@ -1,0 +1,59 @@
+# Name : M TAHA
+# Roll No : (F22BSEEN1EO2084)
+class SalaryTemplate:
+    def __init__(self, name, base_salary):
+        self.name = name
+        self.base_salary = base_salary
+        self.salary_items = []
+
+    def add_salary_item(self, salary_item):
+        self.salary_items.append(salary_item)
+
+    def calculate_salary(self):
+        total_salary = self.base_salary
+        for salary_item in self.salary_items:
+            total_salary += salary_item.calculate_amount()
+        return total_salary
+
+    def calculate_bonus(self):
+        bonus_items = [item for item in self.salary_items if isinstance(item, BonusSalaryItem)]
+        return sum(item.calculate_amount() for item in bonus_items)
+
+    def calculate_deductions(self):
+        deduction_items = [item for item in self.salary_items if isinstance(item, DeductionSalaryItem)]
+        return sum(item.calculate_amount() for item in deduction_items)
+
+    def print_salary_slip(self):
+        print("Salary slip for", self.name)
+        print("===============================")
+        print("Base Salary:", self.base_salary)
+        print("Bonus:", self.calculate_bonus())
+        print("Deductions:", self.calculate_deductions())
+        print("-------------------------------")
+        print("Total Salary:", self.calculate_salary())
+
+
+class SalaryItem:
+    def __init__(self, name):
+        self.name = name
+
+    def calculate_amount(self):
+        pass
+
+
+class BonusSalaryItem(SalaryItem):
+    def __init__(self, name, amount):
+        super().__init__(name)
+        self.amount = amount
+
+    def calculate_amount(self):
+        return self.amount
+
+
+class DeductionSalaryItem(SalaryItem):
+    def __init__(self, name, amount):
+        super().__init__(name)
+        self.amount = amount
+
+    def calculate_amount(self):
+        return -self.amount
